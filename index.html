@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#d92132">
+    <title>A-55 クーポン</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <style>
+        :root {
+            font-family: system-ui, 'Noto Sans JP', sans-serif;
+            color: #302320;
+            background: #fff9ed
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0
+        }
+
+        header {
+            background: #d92132;
+            color: white;
+            padding: 20px;
+            text-align: center
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px
+        }
+
+        main {
+            max-width: 700px;
+            margin: 24px auto;
+            padding: 0 16px
+        }
+
+        .panel {
+            background: white;
+            border: 2px solid #ffe4a3;
+            border-radius: 18px;
+            padding: 22px;
+            margin: 16px 0;
+            box-shadow: 0 4px 14px #5522000b
+        }
+
+        h2 {
+            margin-top: 0
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 4px;
+            font-weight: 700
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            font: inherit;
+            border: 1px solid #bdb3a5;
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        button {
+            font: inherit;
+            border: 0;
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: pointer;
+            background: #d92132;
+            color: white;
+            font-weight: 800;
+            margin: 10px 5px 0 0
+        }
+
+        button.secondary {
+            background: #295f78
+        }
+
+        button:disabled {
+            background: #999
+        }
+
+        small,
+        .muted {
+            color: #675c54
+        }
+
+        .amount {
+            font-size: 48px;
+            font-weight: 900;
+            color: #d92132;
+            text-align: center
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .status {
+            padding: 12px;
+            border-radius: 10px;
+            background: #fff1ce;
+            margin: 12px 0;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere
+        }
+
+        .ticket {
+            border: 3px dashed #d92132;
+            text-align: center
+        }
+
+        a {
+            overflow-wrap: anywhere
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🍬 放課後駄菓子バー A-55</h1>
+        <div>大阪梅田店｜クーポン</div>
+    </header>
+    <main>
+        <section id="setup" class="panel hidden">
+            <h2>接続設定が必要です</h2>
+            <p>このアプリはまだSupabaseに接続されていません。<code>config.js</code> にProject URLとPublishable keyを設定してください。</p>
+        </section>
+        <section id="login" class="panel hidden">
+
+            <h2>スタッフログイン</h2><label>メールアドレス</label><input id="email" type="email"
+                autocomplete="username"><label>パスワード</label><input id="password" type="password"
+                autocomplete="current-password"><label style="font-weight:normal"><input id="showPassword"
+                    type="checkbox" style="width:auto"
+                    onchange="document.getElementById('password').type=this.checked?'text':'password'">
+                パスワードを表示</label><button id="signin">ログイン</button>
+            <p class="muted">店長・スタッフ専用</p>
+        </section>
+        <section id="staff" class="hidden">
+            <div class="panel">
+                <h2>クーポン発行</h2>
+                <p id="who" class="muted"></p><label>クーポン名</label><input id="title" value="A-55 ご優待クーポン"
+                    maxlength="100"><label>割引金額（円）</label><input id="amount" type="number" min="1" step="1"
+                    placeholder="1000"><label>お客様名（任意）</label><input id="customer"
+                    maxlength="100"><label>説明（任意）</label><textarea id="description"
+                    rows="2"></textarea><label>利用条件（任意）</label><textarea id="conditions"
+                    rows="2"></textarea><label>備考（任意）</label><textarea id="notes"
+                    rows="2"></textarea><label>有効期限（任意）</label><input id="expiry" type="datetime-local"><button
+                    id="issue">クーポン発行</button><button class="secondary" id="signout">ログアウト</button>
+                    <div id="issued" class="status hidden"></div><button id="copyUrl" class="secondary" type="button" hidden>📋 URLをコピー</button>            </div>
+            <div class="panel">
+                <h2>最近の発行履歴</h2><button id="refresh" class="secondary">更新</button>
+                <div id="history" class="status"></div>
+            </div>
+        </section>
+        <section id="customerView" class="panel ticket hidden">
+            <h2 id="couponTitle">クーポン</h2>
+            <div id="couponAmount" class="amount"></div>
+            <p id="couponName"></p>
+            <p id="couponDescription"></p>
+            <p id="couponConditions"></p>
+            <p id="couponNotes"></p>
+            <p id="couponExpiry"></p>
+            <div id="couponStatus" class="status"></div><button id="redeem">使用済みにする</button>
+            <p class="muted">ご来店時にスタッフに画面をお見せください。使用済みにすると元に戻せません。</p>
+        </section>
+        <div id="notice" class="status hidden" role="status"></div>
+    </main>
+    <script src="config.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
